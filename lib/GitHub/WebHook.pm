@@ -2,7 +2,7 @@ package GitHub::WebHook;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
+our $VERSION = '0.10';
 
 sub call { }
 
@@ -49,6 +49,10 @@ See L<Plack::GitHub::WebHook> for an introduction.
 =item
 
 L<GitHub::WebHook::Run>
+
+=item
+
+L<GitHub::WebHook::Clone>
 
 =back
 

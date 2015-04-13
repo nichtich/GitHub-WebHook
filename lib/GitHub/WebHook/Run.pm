@@ -7,7 +7,7 @@ use IPC::Run3;
 use Scalar::Util qw(reftype);
 use Carp;
 
-our $VERSION = '0.01';
+our $VERSION = '0.10';
 
 sub new {
     my ($class, %config) = @_;
@@ -34,8 +34,10 @@ sub call {
     }
 
     my $cmd = $self->{cmd}->(@_);
-    $logger->info('$ '.join ' ', @$cmd);
-    run3 $cmd, undef, $logger->{info}, $logger->{error};
+    if (@$cmd) {
+        $logger->info('$ '.join ' ', @$cmd);
+        run3 $cmd, undef, $logger->{info}, $logger->{error};
+    }
 
     1;
 }
@@ -72,7 +74,7 @@ C<info> and STDERR on log level C<error>. The command's exit code is ignored.
 
 The command to execute, given as array reference or as code reference to return
 an array reference given payload, event, delivery and logger (as usual to all
-hooks).
+hooks). Empty array references are ignored.
 
 =item chdir
 
