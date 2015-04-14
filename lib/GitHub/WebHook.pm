@@ -40,7 +40,7 @@ A logger object
 
 =back
 
-See L<Plack::GitHub::WebHook> for an introduction.
+See L<Plack::App::GitHub::WebHook> for an introduction.
 
 =head1 HANDLERS
 
