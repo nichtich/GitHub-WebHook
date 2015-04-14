@@ -12,7 +12,7 @@ for (undef, 1, {}) {
 my $run = GitHub::WebHook::Run->new( 
     cmd => sub {
         my $payload = shift;
-        [ $^X, '-e', "print \"$payload\\n\"" ]
+        [ $^X, '-e', 'print "'.$payload.'\n";die "!\n"' ]
     }
 );
 
@@ -24,8 +24,9 @@ my $logger = Plack::App::GitHub::WebHook::Logger->new( sub {
 ok $run->call(42,0,0,$logger), 'called';
 
 is_deeply \@log, [
-    info => '$ '.$^X.' -e print "42\n"',
-    info => 42
+    info => '$ '.$^X.' -e print "42\n";die "!\n"',
+    debug => 42,
+    warn  => '!',
 ], 'executed and logged';
 
 done_testing;

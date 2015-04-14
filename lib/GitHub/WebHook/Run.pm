@@ -23,6 +23,15 @@ sub new {
     }, $class;
 }
 
+sub run {
+    my ($self, $cmd, $logger) = @_;
+
+    if (@$cmd) {
+        $logger->info('$ '.join ' ', @$cmd);
+        run3 $cmd, undef, $logger->{debug}, $logger->{warn};
+    }
+}
+
 sub call {
     my $self   = shift;
     my $logger = $_[3];
@@ -33,12 +42,7 @@ sub call {
         chdir $dir;
     }
 
-    my $cmd = $self->{cmd}->(@_);
-    if (@$cmd) {
-        $logger->info('$ '.join ' ', @$cmd);
-        run3 $cmd, undef, $logger->{info}, $logger->{error};
-    }
-
+    $self->run( $self->{cmd}->(@_), $logger );
     1;
 }
 
@@ -63,8 +67,9 @@ GitHub::WebHook::Run - Run a subprocess on GitHub WebHook reception
 =head1 DESCRIPTION
 
 This module can be used to call a command on reception of a GitHub WebHook with
-L<Plack::App::GitHub::WebHook>. The command is logged with STDOUT on log level
-C<info> and STDERR on log level C<error>. The command's exit code is ignored.
+L<Plack::App::GitHub::WebHook>. The command is logged with log level C<info>
+and its output with STDOUT on log level C<debug> and STDERR on log level
+C<error>. The command's exit code is ignored.
 
 =head1 CONFIGURATION
 
