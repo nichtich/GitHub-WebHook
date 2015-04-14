@@ -2,7 +2,6 @@ use strict;
 use warnings;
 use Test::More;
 use GitHub::WebHook::Run;
-use Plack::App::GitHub::WebHook; #::Logger;
 
 for (undef, 1, {}) {
     eval { GitHub::WebHook::Run->new( cmd => $_ ) };
@@ -17,16 +16,16 @@ my $run = GitHub::WebHook::Run->new(
 );
 
 my @log;
-my $logger = Plack::App::GitHub::WebHook::Logger->new( sub {
-    push @log, $_[0]->{level}, $_[0]->{message};
-});
+my $logger = {
+    map { my $level = $_; $level => sub { push @log, $level, $_[0] } } 
+    qw(debug info warn error fatal)
+};
 
 ok $run->call(42,0,0,$logger), 'called';
-
 is_deeply \@log, [
-    info => '$ '.$^X.' -e print "42\n";die "!\n"',
-    debug => 42,
-    warn  => '!',
+    info  => '$ '.$^X.' -e print "42\n";die "!\n"',
+    debug => "42\n",
+    warn  => "!\n",
 ], 'executed and logged';
 
 done_testing;

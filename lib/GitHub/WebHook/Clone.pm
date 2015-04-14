@@ -5,7 +5,7 @@ use v5.10;
 
 use parent 'GitHub::WebHook::Run';
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 sub new {
     my ($class, %config) = @_;
@@ -20,7 +20,7 @@ sub new {
 
     bless {
         cmd => sub {
-            my ($payload, $event, $delivery, $log) = @_;
+            my ($payload, $event, $id, $log) = @_;
             my $origin = $_[0]->{repository}->{clone_url} or die 'missing clone_url';
             if ( -d $git_dir ) {
                 chdir $work_tree;
@@ -77,7 +77,7 @@ directory.
 
 =head1 SEE ALSO
 
-L<GitHub::WebHook::Run>
+L<GitHub::WebHook>, L<GitHub::WebHook::Run>, L<Git::Repository>
 
 =head1 COPYRIGHT AND LICENSE
 
