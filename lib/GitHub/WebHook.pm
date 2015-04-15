@@ -81,6 +81,10 @@ messages to.
 
 =back
 
+The method is expected to return a true value on success, or a false value on
+expected success (e.g. when it forks a new process). It may also die in case of
+a fatal error.
+
 =head1 MODULES
 
 =over
